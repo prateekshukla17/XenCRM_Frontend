@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model campaign_delivery_summary {
+  campaign_id     String    @id @db.Uuid
+  total_messages  Int?      @default(0)
+  pending_count   Int?      @default(0)
+  sent_count      Int?      @default(0)
+  delivered_count Int?      @default(0)
+  failed_count    Int?      @default(0)
+  last_updated    DateTime? @default(now()) @db.Timestamp(6)
+  campaigns       campaigns @relation(fields: [campaign_id], references: [campaign_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model campaign_stats {
+  campaign_id     String    @id @db.Uuid
+  total_sent      Int?      @default(0)
+  total_delivered Int?      @default(0)
+  total_failed    Int?      @default(0)
+  delivery_rate   Decimal?  @default(dbgenerated("\nCASE\n    WHEN (total_sent = 0) THEN (0)::numeric\n    ELSE round((((total_delivered)::numeric / (total_sent)::numeric) * (100)::numeric), 2)\nEND")) @db.Decimal(5, 2)
+  last_updated    DateTime? @default(now()) @db.Timestamp(6)
+  campaigns       campaigns @relation(fields: [campaign_id], references: [campaign_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model campaigns {
+  campaign_id               String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  segment_id                String                     @db.Uuid
+  name                      String                     @db.VarChar(255)
+  message_template          String
+  campaign_type             String?                    @default("PROMOTIONAL") @db.VarChar(50)
+  target_audience_count     Int?
+  created_by                String                     @db.VarChar(255)
+  status                    String?                    @default("ACTIVE") @db.VarChar(20)
+  created_at                DateTime?                  @default(now()) @db.Timestamp(6)
+  campaign_delivery_summary campaign_delivery_summary?
+  campaign_stats            campaign_stats?
+  segments                  segments                   @relation(fields: [segment_id], references: [segment_id], onDelete: NoAction, onUpdate: NoAction)
+  communication_log         communication_log[]
+}
+
+model communication_log {
+  communication_id  String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  campaign_id       String              @db.Uuid
+  customer_id       String              @db.Uuid
+  customer_email    String              @db.VarChar(255)
+  customer_name     String?             @db.VarChar(255)
+  message_text      String
+  status            String?             @default("PENDING") @db.VarChar(20)
+  attempts          Int?                @default(0)
+  max_attempts      Int?                @default(3)
+  vendor_ref        String?             @db.VarChar(255)
+  created_at        DateTime?           @default(now()) @db.Timestamp(6)
+  last_attempt_at   DateTime?           @db.Timestamp(6)
+  delivered_at      DateTime?           @db.Timestamp(6)
+  campaigns         campaigns           @relation(fields: [campaign_id], references: [campaign_id], onDelete: NoAction, onUpdate: NoAction)
+  customers_mv      customers_mv        @relation(fields: [customer_id], references: [customer_id], onDelete: NoAction, onUpdate: NoAction)
+  delivery_receipts delivery_receipts[]
+}
+
+model customers_mv {
+  customer_id           String              @id @db.Uuid
+  name                  String?             @db.VarChar(255)
+  email                 String?             @db.VarChar(255)
+  total_spend           Decimal?            @db.Decimal(12, 2)
+  total_visits          Int?
+  last_order_at         DateTime?           @db.Timestamp(6)
+  status                String?             @db.VarChar(20)
+  days_since_last_order Int?
+  synced_at             DateTime?           @default(now()) @db.Timestamp(6)
+  communication_log     communication_log[]
+}
+
+model delivery_receipts {
+  receipt_id               String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  communication_id         String                     @db.Uuid
+  vendor_ref               String?                    @db.VarChar(255)
+  receipt_status           String                     @db.VarChar(20)
+  failure_reason           String?
+  received_at              DateTime?                  @default(now()) @db.Timestamp(6)
+  processed                Boolean?                   @default(false)
+  communication_log        communication_log          @relation(fields: [communication_id], references: [communication_id], onDelete: NoAction, onUpdate: NoAction)
+  receipt_processing_queue receipt_processing_queue[]
+}
+
+model receipt_processing_queue {
+  id                Int               @id @default(autoincrement())
+  receipt_id        String            @db.Uuid
+  status            String?           @default("PENDING") @db.VarChar(20)
+  created_at        DateTime?         @default(now()) @db.Timestamp(6)
+  processed_at      DateTime?         @db.Timestamp(6)
+  delivery_receipts delivery_receipts @relation(fields: [receipt_id], references: [receipt_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model segments {
+  segment_id    String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name          String      @db.VarChar(255)
+  description   String?
+  rules         Json
+  preview_count Int?
+  created_by    String?     @db.VarChar(255)
+  created_at    DateTime?   @default(now()) @db.Timestamp(6)
+  updated_at    DateTime?   @default(now()) @db.Timestamp(6)
+  campaigns     campaigns[]
+}

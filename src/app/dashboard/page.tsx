@@ -5,6 +5,14 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import Navbar from '@/components/navbar';
 
+interface DashboardData {
+  name: string;
+  email: string;
+  total_spend: string;
+  total_visits: string;
+  status: string;
+}
+
 export default function Dashboard() {
   const { data: session, status } = useSession();
   const router = useRouter();
