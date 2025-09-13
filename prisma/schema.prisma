@@ -74,6 +74,7 @@ model customers_mv {
   status                String?             @db.VarChar(20)
   days_since_last_order Int?
   synced_at             DateTime?           @default(now()) @db.Timestamp(6)
+  total_orders          Int?                @default(0)
   communication_log     communication_log[]
 }
 
