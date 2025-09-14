@@ -30,7 +30,7 @@ const Navbar = () => {
               <span className='absolute -bottom-1 left-0 w-0 h-0.5 bg-[hsl(45,93%,47%)] transition-all duration-300 group-hover:w-full'></span>
             </a>
             <a
-              href='/segements'
+              href='/segments'
               className='text-[hsl(220,10%,60%)] hover:text-[hsl(45,93%,47%)] transition-colors duration-300 font-medium relative group'
             >
               Segments
