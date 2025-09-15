@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { PrismaClient } from '../../../generated/prisma';
 
 const prisma = new PrismaClient();
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const result = await prisma.campaigns.findMany({
       select: {
@@ -22,7 +22,6 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    const totalCampaigns = await prisma.campaigns.count();
     return NextResponse.json(
       {
         success: true,

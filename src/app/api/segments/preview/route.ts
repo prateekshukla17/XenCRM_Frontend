@@ -128,7 +128,7 @@ export async function POST(request: NextRequest) {
       SELECT COUNT(*) as count 
       FROM customers_mv 
       WHERE ${Prisma.raw(whereClause)}
-    ` as any[];
+    ` as Array<{ count: string }>;
     
     const count = parseInt(countResult[0]?.count || '0');
 
@@ -174,7 +174,7 @@ export async function GET(request: NextRequest) {
     let rules;
     try {
       rules = JSON.parse(decodeURIComponent(rulesParam));
-    } catch (error) {
+    } catch {
       return NextResponse.json(
         {
           success: false,
@@ -235,7 +235,16 @@ export async function GET(request: NextRequest) {
       WHERE ${Prisma.raw(whereClause)}
       ORDER BY total_spend DESC
       LIMIT ${limit}
-    ` as any[];
+    ` as Array<{
+      customer_id: string;
+      name: string;
+      email: string;
+      total_spend: string;
+      total_visits: string;
+      total_orders: number;
+      status: string;
+      days_since_last_order: number;
+    }>;
 
     return NextResponse.json(
       {

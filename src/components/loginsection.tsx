@@ -2,9 +2,9 @@
 
 import { useSession, signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 
-export default function LoginSec() {
+function LoginSecContent() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -20,7 +20,7 @@ export default function LoginSec() {
     setError(null);
     try {
       await signIn('google', { callbackUrl: '/dashboard' });
-    } catch (error) {
+    } catch {
       setError('Failed to sign in. Please try again.');
     }
   };
@@ -49,5 +49,13 @@ export default function LoginSec() {
         <div className='mt-4 text-sm text-gray-600'></div>
       </div>
     </div>
+  );
+}
+
+export default function LoginSec() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginSecContent />
+    </Suspense>
   );
 }

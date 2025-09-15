@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient, Prisma } from '../../../../generated/prisma';
-import { getServerSession } from 'next-auth';
 
 const prisma = new PrismaClient();
 
@@ -110,7 +109,6 @@ export async function PUT(
   { params }: { params: Promise<{ segmentId: string }> }
 ) {
   try {
-    const session = await getServerSession();
     const { segmentId } = await params;
     const body = await request.json();
     
@@ -160,7 +158,7 @@ export async function PUT(
           SELECT COUNT(*) as count 
           FROM customers_mv 
           WHERE ${Prisma.raw(whereClause)}
-        ` as any[];
+        ` as Array<{ count: string }>;
         previewCount = parseInt(countResult[0]?.count || '0');
       }
     } catch (countError) {

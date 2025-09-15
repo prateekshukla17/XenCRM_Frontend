@@ -1,7 +1,5 @@
 'use client';
-import { useSession, signOut } from 'next-auth/react';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { signOut } from 'next-auth/react';
 import { Zap } from 'lucide-react';
 
 const Navbar = () => {

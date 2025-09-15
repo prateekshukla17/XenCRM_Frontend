@@ -60,7 +60,7 @@ function buildSqlQuery(rules: RuleGroup[]): string {
 }
 
 // GET - Fetch all segments
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const segments = await prisma.segments.findMany({
       orderBy: {
@@ -126,7 +126,7 @@ export async function POST(request: NextRequest) {
           SELECT COUNT(*) as count 
           FROM customers_mv 
           WHERE ${Prisma.raw(whereClause)}
-        ` as any[];
+        ` as Array<{ count: string }>;
         previewCount = parseInt(countResult[0]?.count || '0');
       }
     } catch (countError) {

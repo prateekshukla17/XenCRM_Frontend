@@ -13,7 +13,6 @@ import {
   Save,
   Edit2,
   X,
-  Check,
   Send,
 } from 'lucide-react';
 

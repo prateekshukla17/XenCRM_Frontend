@@ -2,7 +2,7 @@
 
 import { useSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import Navbar from '@/components/navbar';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Send, Users, MessageSquare, Loader2 } from 'lucide-react';
@@ -21,7 +21,7 @@ interface Campaign {
   campaign_type: string;
 }
 
-export default function CampaignsPage() {
+function CampaignsContent() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -358,5 +358,13 @@ export default function CampaignsPage() {
         </div>
       </div>
     </>
+  );
+}
+
+export default function CampaignsPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CampaignsContent />
+    </Suspense>
   );
 }
