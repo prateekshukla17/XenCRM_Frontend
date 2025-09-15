@@ -24,6 +24,24 @@ The backend for this project can be found in the [XenCRM_Backend](https://github
 - **Turbopack** for development and build optimization
 - **Recharts** for data visualization
 
+## Next Routes
+
+```
+app/dashboard -> #Homepage Dashboard
+app/segments -> # Segment Creation UI
+app/campaigns -> #Campaing Creation UI
+app/campaignStats - > #Displaying Campaign Stats UI
+```
+
+## Next API Routes
+
+```
+/api/campaings/route.ts -> #Campaign Creation Logic.
+/api/segements/route.ts -> #Segement Creation Logic.
+/api/dashapi/route.ts -> #Fetched data for the Main dashboard.
+/api/campaignstats/route.ts -> #For displaying Past Campaign Stats.
+```
+
 ## Getting Started
 
 ### Prerequisites
