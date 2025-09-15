@@ -155,7 +155,12 @@ export default function Dashboard() {
     </div>
   );
 
-  if (status === 'loading') return <p>Loading...</p>;
+  if (status === 'loading')
+    return (
+      <div className='bg-gradient-background'>
+        <p>Loading...</p>
+      </div>
+    );
 
   if (!session) return null;
 

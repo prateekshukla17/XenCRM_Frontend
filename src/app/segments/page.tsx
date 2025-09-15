@@ -5,7 +5,17 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Navbar from '@/components/navbar';
 import { Button } from '@/components/ui/button';
-import { Plus, Trash2, Users, Eye, Save, Edit2, X, Check, Send } from 'lucide-react';
+import {
+  Plus,
+  Trash2,
+  Users,
+  Eye,
+  Save,
+  Edit2,
+  X,
+  Check,
+  Send,
+} from 'lucide-react';
 
 interface Rule {
   id: string;
@@ -335,7 +345,12 @@ export default function SegmentsPage() {
     return `${field} ${operator} ${value}`;
   };
 
-  if (status === 'loading') return <p>Loading...</p>;
+  if (status === 'loading')
+    return (
+      <div className='bg-gradient-background'>
+        <p>Loading...</p>
+      </div>
+    );
   if (!session) return null;
 
   return (
@@ -740,7 +755,11 @@ export default function SegmentsPage() {
 
                       <div className='flex space-x-2 ml-6'>
                         <Button
-                          onClick={() => router.push(`/campaigns?segment_id=${segment.segment_id}`)}
+                          onClick={() =>
+                            router.push(
+                              `/campaigns?segment_id=${segment.segment_id}`
+                            )
+                          }
                           variant='outline'
                           size='sm'
                           className='text-green-600 hover:text-green-700'

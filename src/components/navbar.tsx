@@ -40,9 +40,17 @@ const Navbar = () => {
               href='/campaigns'
               className='text-[hsl(220,10%,60%)] hover:text-[hsl(45,93%,47%)] transition-colors duration-300 font-medium relative group'
             >
-              Campaigns
+              Start Campaign
               <span className='absolute -bottom-1 left-0 w-0 h-0.5 bg-[hsl(45,93%,47%)] transition-all duration-300 group-hover:w-full'></span>
             </a>
+            <a
+              href='/campaignStats'
+              className='text-[hsl(220,10%,60%)] hover:text-[hsl(45,93%,47%)] transition-colors duration-300 font-medium relative group'
+            >
+              Campaign Stats
+              <span className='absolute -bottom-1 left-0 w-0 h-0.5 bg-[hsl(45,93%,47%)] transition-all duration-300 group-hover:w-full'></span>
+            </a>
+
             <button
               onClick={() => signOut()}
               className='bg-red-600 text-white px-4 py-2 rounded hover:bg-red-500'
