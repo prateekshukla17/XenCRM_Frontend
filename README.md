@@ -145,3 +145,17 @@ NEXTAUTH_URL="http://localhost:3000"
     ├───generated/
     │   └───prisma/...
 ```
+
+## Limitations & TradeOffs
+
+- Redundacy : I intentionally kept certain tables denormalised, to speed up aggregration queires, also to reduce number of joins, which may scan large customer databases.
+
+- Production Costs: Range queries for Next API routes might use large compute (extra costs on Vercel Production Enviroment).
+
+- Simpler UI: Not as poslished as drag-and-drop visual block builders used in Production CRMs
+
+- AI Integeration(MCP Server) : Needs an external client like CLAUDE DESKTOP, for future scope, building and MCP to directly intergrating into the webapplication.
+
+### Credits
+
+Built with sleepless nights, multiple Red Bulls and determination, by Prateek Shukla :)
